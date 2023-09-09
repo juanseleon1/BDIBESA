@@ -6,11 +6,11 @@ import BESA.BDI.AgentStructuralModel.GoalBDI;
 import BESA.BDI.AgentStructuralModel.LatentGoalStructure.Goal;
 import BESA.BDI.AgentStructuralModel.LatentGoalStructure.LatentGoal;
 
-public class GoalStructure {
+public class LatentGoalStructure {
     private HashSet<GoalBDI> bdiGoals;
     private HashSet<LatentGoal> latentGoals;
 
-    public GoalStructure() {
+    public LatentGoalStructure() {
         bdiGoals = new HashSet<>();
         latentGoals = new HashSet<>();
     }
@@ -21,6 +21,9 @@ public class GoalStructure {
 
     public HashSet<LatentGoal> getLatentGoals() {
         return latentGoals;
+    }
+    public void addOrphanBDIGoal(GoalBDI child){
+        addIfNotPresent(bdiGoals, child);
     }
 
     public void addRelation(Goal parent, Goal child) {

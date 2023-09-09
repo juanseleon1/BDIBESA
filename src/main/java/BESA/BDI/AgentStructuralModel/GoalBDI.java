@@ -33,6 +33,7 @@ public abstract class GoalBDI extends Goal implements BDIEvaluable, Comparable<G
     private String description;
     private GoalBDITypes type;
     private boolean succeed;
+    private boolean isAuthorized;
 
     public GoalBDI(long id, RationalRole role, String description, GoalBDITypes type) {
         this.id = id;
@@ -189,6 +190,18 @@ public abstract class GoalBDI extends Goal implements BDIEvaluable, Comparable<G
     @Override
     public void addChildren(Goal goal) {
         System.out.println("Cant add children to a GoalBDI object");
+    }
+
+    public boolean hasAutonomy(StateBDI stateBDI) {
+        return stateBDI.performAutonomyChecks(this);
+    }
+
+    public boolean isAuthorized() {
+        return isAuthorized;
+    }
+
+    public void setAuthorized(boolean isAuthorized) {
+        this.isAuthorized = isAuthorized;
     }
 
 }
