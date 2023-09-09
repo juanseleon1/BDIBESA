@@ -9,6 +9,7 @@ package BESA.BDI.AgentStructuralModel.Agent;
 import BESA.BDI.AgentStructuralModel.BDIMachineParams;
 import BESA.BDI.AgentStructuralModel.GoalBDI;
 import BESA.BDI.AgentStructuralModel.StateBDI;
+import BESA.BDI.AgentStructuralModel.AutonomyManager.AutonomyManager;
 import BESA.BDI.DBIDecisionMachine.DesireToIntentionInstantiationGuard;
 import BESA.BDI.DBIDecisionMachine.EndedTheDesiresMachineGuard;
 import BESA.BDI.DBIDecisionMachine.GarbageCollectionGuard;
@@ -27,7 +28,8 @@ import rational.mapping.Believes;
 
 /**
  * <p>
- * Class that represents the BDI specific Agent</p>
+ * Class that represents the BDI specific Agent
+ * </p>
  *
  * @author SIDRe - Pontificia Universidad Javeriana
  * @author Takina - Pontificia Universidad Javeriana
@@ -37,30 +39,37 @@ import rational.mapping.Believes;
 public abstract class AgentBDI extends RationalAgent {
 
     Timer viewerGarbageCollector;
+    private LatentGoalStructure goalStruct;
 
-    public AgentBDI(String alias, Believes believes, List<GoalBDI> goals, double threshold,  StructBESA structAgent) throws KernelAgentExceptionBESA, ExceptionBESA {
+    public AgentBDI(String alias, Believes believes, List<GoalBDI> goals, double threshold, StructBESA structAgent)
+            throws KernelAgentExceptionBESA, ExceptionBESA {
         super(alias, new StateBDI(goals, threshold, believes), setupBDIStruct(structAgent), 0.91);
     }
 
-    public AgentBDI(String alias, Believes believes, GoalStructure goalStruct, double threshold,  StructBESA structAgent) throws KernelAgentExceptionBESA, ExceptionBESA {
-        super(alias, new StateBDI(new ArrayList<>(goalStruct.getBdiGoals()), goalStruct, threshold, believes), setupBDIStruct(structAgent), 0.91);
+    public AgentBDI(String alias, Believes believes, LatentGoalStructure goalStruct, AutonomyManager autonomyManager ,double threshold,
+            StructBESA structAgent) throws KernelAgentExceptionBESA, ExceptionBESA {
+        super(alias, new StateBDI(new ArrayList<>(goalStruct.getBdiGoals()), threshold, believes),
+                setupBDIStruct(structAgent), 0.91);
+        this.goalStruct = goalStruct;
     }
-    
-    public AgentBDI(String alias, Believes believes, BDIMachineParams machineBDIParams, double threshold, StructBESA structAgent) throws KernelAgentExceptionBESA, ExceptionBESA {
-        super(alias, new StateBDI(machineBDIParams, believes,threshold), setupBDIStruct(structAgent), 0.91);
+
+    public AgentBDI(String alias, Believes believes, BDIMachineParams machineBDIParams, double threshold,
+            StructBESA structAgent) throws KernelAgentExceptionBESA, ExceptionBESA {
+        super(alias, new StateBDI(machineBDIParams, believes, threshold), setupBDIStruct(structAgent), 0.91);
     }
-    
-    public AgentBDI(String alias, Believes believes, BDIMachineParams machineBDIParams, StructBESA structAgent) throws KernelAgentExceptionBESA, ExceptionBESA {
+
+    public AgentBDI(String alias, Believes believes, BDIMachineParams machineBDIParams, StructBESA structAgent)
+            throws KernelAgentExceptionBESA, ExceptionBESA {
         super(alias, new StateBDI(machineBDIParams, believes), setupBDIStruct(structAgent), 0.91);
     }
- 
+
     /**
      * Creates a new instance.
      *
-     * @param alias Agent alias.
-     * @param state Agent state.
+     * @param alias       Agent alias.
+     * @param state       Agent state.
      * @param structAgent Agent struct.
-     * @param passwd Agent password.
+     * @param passwd      Agent password.
      * @throws BESA.ExceptionBESA
      */
     public AgentBDI(String alias, StateBDI state, StructBESA structAgent, double passwd) throws ExceptionBESA {
@@ -76,11 +85,12 @@ public abstract class AgentBDI extends RationalAgent {
 
     /**
      * <p>
-     * setup the 3 BDI flow default behaviors (Threads) to the BDI Structure</p>
+     * setup the 3 BDI flow default behaviors (Threads) to the BDI Structure
+     * </p>
      *
      * @throws ExceptionBESA
      */
- 
+
     private static StructBESA setupBDIStruct(StructBESA structBESA) throws ExceptionBESA {
         structBESA.addBehavior("DataAndInformationFlowBehavior");
         structBESA.addBehavior("DominantGoalMappingBehavior");
@@ -88,16 +98,17 @@ public abstract class AgentBDI extends RationalAgent {
         structBESA.addBehavior("DesireToIntentionInstantiationBehavior");
         structBESA.addBehavior("EndedTheDesiresMachine");
         structBESA.addBehavior("GarbageCollectionBehavior");
-        structBESA.bindGuard("IntermediateBehaviorToDesiresMachine",IntermediateBehaviorToDesiresMachineGuard.class);
+        structBESA.bindGuard("IntermediateBehaviorToDesiresMachine", IntermediateBehaviorToDesiresMachineGuard.class);
         structBESA.bindGuard("DesireToIntentionInstantiationBehavior", DesireToIntentionInstantiationGuard.class);
-        structBESA.bindGuard("EndedTheDesiresMachine",EndedTheDesiresMachineGuard.class);
+        structBESA.bindGuard("EndedTheDesiresMachine", EndedTheDesiresMachineGuard.class);
         structBESA.bindGuard("GarbageCollectionBehavior", GarbageCollectionGuard.class);
         return structBESA;
     }
 
     /**
      * <p>
-     * Start the timer for the BDI Flow</p>
+     * Start the timer for the BDI Flow
+     * </p>
      *
      * @throws ExceptionBESA
      */
@@ -107,7 +118,8 @@ public abstract class AgentBDI extends RationalAgent {
              * start the timer for garbageCollector *
              */
             viewerGarbageCollector = new Timer();
-            GarbageCollectorTimerTask taskGarbageCollectorTimer = new GarbageCollectorTimerTask(this.getAlias(), this.getAdmLocal());
+            GarbageCollectorTimerTask taskGarbageCollectorTimer = new GarbageCollectorTimerTask(this.getAlias(),
+                    this.getAdmLocal());
             viewerGarbageCollector.schedule(taskGarbageCollectorTimer, 1000, 1000);
         }
     }
@@ -118,11 +130,12 @@ public abstract class AgentBDI extends RationalAgent {
              * start the timer for garbageCollector *
              */
             viewerGarbageCollector = new Timer();
-            GarbageCollectorTimerTask taskGarbageCollectorTimer = new GarbageCollectorTimerTask(this.getAlias(), this.getAdmLocal());
+            GarbageCollectorTimerTask taskGarbageCollectorTimer = new GarbageCollectorTimerTask(this.getAlias(),
+                    this.getAdmLocal());
             viewerGarbageCollector.schedule(taskGarbageCollectorTimer, delay, period);
         }
     }
-    
+
     @Override
     final public void shutdownRationalAgent() {
         if (viewerGarbageCollector != null) {
@@ -130,7 +143,17 @@ public abstract class AgentBDI extends RationalAgent {
         }
         shutdownAgentBDI();
     }
-    
+
     public abstract void setupAgentBDI();
+
     public abstract void shutdownAgentBDI();
+
+    public LatentGoalStructure getGoalStruct() {
+        return goalStruct;
+    }
+
+    public void setGoalStruct(LatentGoalStructure goalStruct) {
+        this.goalStruct = goalStruct;
+    }
+
 }

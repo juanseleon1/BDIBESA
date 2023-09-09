@@ -1,25 +1,23 @@
- package BESA.BDI.AgentStructuralModel;
+package BESA.BDI.AgentStructuralModel;
 
 import rational.RationalState;
 import java.util.List;
 
-import BESA.BDI.AgentStructuralModel.Agent.GoalStructure;
+import BESA.BDI.AgentStructuralModel.AutonomyManager.AutonomyManager;
 import rational.mapping.Believes;
 
-
 public class StateBDI extends RationalState {
-     
-    private BDIMachineParams machineBDIParams;  
+
+    private BDIMachineParams machineBDIParams;
     private boolean endedTheDesiresMachine;
-    private boolean  inQueue;
-    
+    private boolean inQueue;
+
     public StateBDI() {
         super();
         this.machineBDIParams = new BDIMachineParams();
         this.endedTheDesiresMachine = true;
         this.inQueue = false;
     }
-
     public StateBDI(List<GoalBDI> goals, double threshold, Believes believes) {
         super(believes);
         this.machineBDIParams = new BDIMachineParams();
@@ -35,7 +33,12 @@ public class StateBDI extends RationalState {
         this.endedTheDesiresMachine = true;
         this.inQueue = false;
     }
-    
+
+    public StateBDI(List<GoalBDI> goals, double threshold, Believes believes, AutonomyManager autonomyManager) {
+        this(goals,threshold, believes);
+        this.machineBDIParams.setAutonomyManager(autonomyManager);
+    }
+
     public StateBDI(BDIMachineParams machineBDIParams, Believes believes) {
         super(believes);
         this.machineBDIParams = machineBDIParams;
@@ -54,11 +57,6 @@ public class StateBDI extends RationalState {
         this.machineBDIParams.setAttentionCycleThreshold(threshold);
         this.endedTheDesiresMachine = true;
         this.inQueue = false;
-    }
-    
-    public StateBDI(List<GoalBDI> goals, GoalStructure goalStruct, double threshold, Believes believes) {
-        this(goals, threshold, believes);
-        machineBDIParams.getLatentGoalManager().setGoalStructure(goalStruct);
     }
 
     public BDIMachineParams getMachineBDIParams() {
@@ -87,6 +85,10 @@ public class StateBDI extends RationalState {
 
     public double getLatentInfluence(GoalBDI goal) {
         return machineBDIParams.getLatentGoalManager().calculateExtraBoost(goal);
+    }
+
+    public boolean performAutonomyChecks(GoalBDI goalBDI) {
+        return machineBDIParams.getAutonomyManager().performAutonomyChecks(goalBDI);
     }
 
 }

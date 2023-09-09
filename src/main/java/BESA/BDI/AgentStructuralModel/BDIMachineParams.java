@@ -9,6 +9,8 @@ package BESA.BDI.AgentStructuralModel;
 import java.util.Iterator;
 import java.util.Set;
 
+import BESA.BDI.AgentStructuralModel.Agent.LatentGoalStructure;
+import BESA.BDI.AgentStructuralModel.AutonomyManager.AutonomyManager;
 import BESA.BDI.AgentStructuralModel.LatentGoalStructure.LatentGoalManager;
 
 
@@ -31,7 +33,10 @@ public class BDIMachineParams {
     private GoalBDI intention;
     // Latent Goal Manager
     private LatentGoalManager latentGoalManager;
-
+    // Autonomy Goal Manager
+    private AutonomyManager autonomyManager;
+    // Hierachical Goal Structure
+    private LatentGoalStructure goalStructure;
 
     /** Thresholds for the goal operations*/
     private double dutyThreshold;
@@ -45,6 +50,13 @@ public class BDIMachineParams {
     public BDIMachineParams() {
         pyramidGoals = new DesireHierarchyPyramid();
         potencialGoals = new PotencialGoalStructure();
+        latentGoalManager = new LatentGoalManager();
+        autonomyManager = new AutonomyManager();
+    }
+
+    public BDIMachineParams(AutonomyManager autonomyManager) {
+        this();
+        this.autonomyManager = autonomyManager;
     }
 
     public BDIMachineParams(double dutyThreshold, double survivalThreshold, double oportunityThreshold, double requirementThreshold, double needThreshold, double attentionCycleThreshold ) {
@@ -55,6 +67,8 @@ public class BDIMachineParams {
         this.needThreshold = needThreshold;
         this.attentionCycleThreshold= attentionCycleThreshold;
         this.pyramidGoals = new DesireHierarchyPyramid();
+        this.latentGoalManager = new LatentGoalManager();
+        this.autonomyManager = new AutonomyManager();
     }
 
     public PotencialGoalStructure getPotencialGoals() {
@@ -180,4 +194,21 @@ public class BDIMachineParams {
     public void setLatentGoalManager(LatentGoalManager latentGoalManager) {
         this.latentGoalManager = latentGoalManager;
     }
+
+    public AutonomyManager getAutonomyManager() {
+        return autonomyManager;
+    }
+
+    public void setAutonomyManager(AutonomyManager autonomyManager) {
+        this.autonomyManager = autonomyManager;
+    }
+
+    public LatentGoalStructure getGoalStructure() {
+        return goalStructure;
+    }
+
+    public void setGoalStructure(LatentGoalStructure goalStructure) {
+        this.goalStructure = goalStructure;
+    }
+
 }
