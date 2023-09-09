@@ -192,8 +192,8 @@ public abstract class GoalBDI extends Goal implements BDIEvaluable, Comparable<G
         System.out.println("Cant add children to a GoalBDI object");
     }
 
-    public boolean hasAutonomy(StateBDI stateBDI) {
-        return stateBDI.performAutonomyChecks(this);
+    public boolean hasAutonomy(StateBDI stateBDI, Believes believes) {
+        return stateBDI.performAutonomyChecks(this, believes);
     }
 
     public boolean isAuthorized() {

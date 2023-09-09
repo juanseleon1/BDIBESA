@@ -87,8 +87,8 @@ public class StateBDI extends RationalState {
         return machineBDIParams.getLatentGoalManager().calculateExtraBoost(goal);
     }
 
-    public boolean performAutonomyChecks(GoalBDI goalBDI) {
-        return machineBDIParams.getAutonomyManager().performAutonomyChecks(goalBDI);
+    public boolean performAutonomyChecks(GoalBDI goalBDI, Believes beliefs) {
+        return machineBDIParams.getAutonomyManager().performAutonomyChecks(goalBDI, beliefs);
     }
 
 }
