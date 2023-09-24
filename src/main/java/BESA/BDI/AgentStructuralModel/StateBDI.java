@@ -4,7 +4,7 @@ import rational.RationalState;
 import java.util.List;
 
 import BESA.BDI.AgentStructuralModel.AutonomyManager.AutonomyManager;
-import BESA.BDI.AgentStructuralModel.LatentGoalStructure.Mission;
+import BESA.BDI.AgentStructuralModel.LatentGoalStructure.AgentRole;
 import rational.mapping.Believes;
 
 public class StateBDI extends RationalState {
@@ -90,8 +90,8 @@ public class StateBDI extends RationalState {
         return machineBDIParams.getAutonomyManager().performAutonomyChecks(goalBDI, beliefs);
     }
 
-    public synchronized void setCurrentMission(Mission mission) {
-        machineBDIParams.setCurrentMission(mission);
+    public synchronized void setCurrentAgentRole(AgentRole agentRole) {
+        machineBDIParams.setCurrentAgentRole(agentRole);
     }
 
 }

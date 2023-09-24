@@ -3,11 +3,11 @@ package BESA.BDI.AgentStructuralModel.LatentGoalStructure;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Mission {
+public class AgentRole {
 
     Map<String, Double> weights;
 
-    public Mission() {
+    public AgentRole() {
         weights = new HashMap<>();
     }
 

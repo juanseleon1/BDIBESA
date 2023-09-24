@@ -69,10 +69,10 @@ public abstract class LatentGoal implements Goal {
 
     @Override
     public double evaluateCompositeContribution(StateBDI stateBDI) throws KernellAgentEventExceptionBESA {
-        Mission mission = stateBDI.getMachineBDIParams().getCurrentMission();
+        AgentRole agentRole = stateBDI.getMachineBDIParams().getCurrentAgentRole();
         double contribution = this.evaluateContribution(stateBDI);
         if (parent != null) {
-            double basePercentage = parent.getContributionValue() * mission.getWeight(parent.getId(), this.getId());
+            double basePercentage = parent.getContributionValue() * agentRole.getWeight(parent.getId(), this.getId());
             contribution *= 1 + basePercentage;
         }
         return contribution;

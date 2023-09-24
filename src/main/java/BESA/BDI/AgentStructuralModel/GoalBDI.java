@@ -11,7 +11,7 @@ import java.util.Set;
 
 import BESA.BDI.AgentStructuralModel.Functions.ContributionComparator;
 import BESA.BDI.AgentStructuralModel.LatentGoalStructure.LatentGoal;
-import BESA.BDI.AgentStructuralModel.LatentGoalStructure.Mission;
+import BESA.BDI.AgentStructuralModel.LatentGoalStructure.AgentRole;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
 import rational.RationalRole;
 import rational.mapping.Believes;
@@ -191,12 +191,12 @@ public abstract class GoalBDI implements BDIEvaluable, Comparable<GoalBDI> {
 
     @Override
     public double evaluateCompositeContribution(StateBDI stateBDI) throws KernellAgentEventExceptionBESA {
-        Mission mission = stateBDI.getMachineBDIParams().getCurrentMission();
+        AgentRole agentRole = stateBDI.getMachineBDIParams().getCurrentAgentRole();
         double parentContribution = 0;
         double baseContribution = this.evaluateContribution(stateBDI);
         if (parents != null) {
             for (LatentGoal parent : parents) {
-                parentContribution += parent.getContributionValue() * mission.getWeight(parent.getId(), this.getId());
+                parentContribution += parent.getContributionValue() * agentRole.getWeight(parent.getId(), this.getId());
             }
         }
         baseContribution *= 1 + parentContribution;

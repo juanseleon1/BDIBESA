@@ -12,7 +12,7 @@ import java.util.Set;
 
 import BESA.BDI.AgentStructuralModel.Agent.LatentGoalStructure;
 import BESA.BDI.AgentStructuralModel.AutonomyManager.AutonomyManager;
-import BESA.BDI.AgentStructuralModel.LatentGoalStructure.Mission;
+import BESA.BDI.AgentStructuralModel.LatentGoalStructure.AgentRole;
 
 /**
  * <p>
@@ -38,12 +38,12 @@ public class BDIMachineParams {
     private AutonomyManager autonomyManager;
     // Hierachical Goal Structure
     private LatentGoalStructure goalStructure;
-    // Default Mission
-    private Mission defaultMission;
-    // Current Mission
-    private Mission currentMission;
-    // List of Missions
-    private List<Mission> missions;
+    // Default AgentRole
+    private AgentRole defaultAgentRole;
+    // Current AgentRole
+    private AgentRole currentAgentRole;
+    // List of AgentRoles
+    private List<AgentRole> agentRoles;
 
     /** Thresholds for the goal operations */
     private double dutyThreshold;
@@ -61,10 +61,10 @@ public class BDIMachineParams {
         autonomyManager = new AutonomyManager();
     }
 
-    public BDIMachineParams(AutonomyManager autonomyManager, Mission defaultMission) {
+    public BDIMachineParams(AutonomyManager autonomyManager, AgentRole defaultAgentRole) {
         this();
         this.autonomyManager = autonomyManager;
-        this.defaultMission = defaultMission;
+        this.defaultAgentRole = defaultAgentRole;
     }
 
     public BDIMachineParams(double latentGoalThreshold, double dutyThreshold, double survivalThreshold,
@@ -177,12 +177,12 @@ public class BDIMachineParams {
         this.intention = intention;
     }
 
-    public Mission getDefaultMission() {
-        return defaultMission;
+    public AgentRole getDefaultAgentRole() {
+        return defaultAgentRole;
     }
 
-    public void setDefaultMission(Mission defaultMission) {
-        this.defaultMission = defaultMission;
+    public void setDefaultAgentRole(AgentRole defaultAgentRole) {
+        this.defaultAgentRole = defaultAgentRole;
     }
 
     /**
@@ -244,24 +244,24 @@ public class BDIMachineParams {
         this.goalStructure = goalStructure;
     }
 
-    public Mission getCurrentMission() {
-        Mission mission = currentMission;
-        if (mission == null) {
-            mission = defaultMission;
+    public AgentRole getCurrentAgentRole() {
+        AgentRole agentRole = currentAgentRole;
+        if (agentRole == null) {
+            agentRole = defaultAgentRole;
         }
-        return mission;
+        return agentRole;
     }
 
-    public void setCurrentMission(Mission currentMission) {
-        this.currentMission = currentMission;
+    public void setCurrentAgentRole(AgentRole currentAgentRole) {
+        this.currentAgentRole = currentAgentRole;
     }
 
-    public List<Mission> getMissions() {
-        return missions;
+    public List<AgentRole> getAgentRoles() {
+        return agentRoles;
     }
 
-    public void setMissions(List<Mission> missions) {
-        this.missions = missions;
+    public void setAgentRoles(List<AgentRole> agentRoles) {
+        this.agentRoles = agentRoles;
     }
 
 }

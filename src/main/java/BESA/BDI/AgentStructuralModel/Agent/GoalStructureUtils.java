@@ -22,6 +22,8 @@ public class GoalStructureUtils {
             node.setDetectionValue(node.detectGoal(believes));
             if (node.getDetectionValue() > threshold) {
                 node.setContributionValue(node.evaluateCompositeContribution(stateBDI));
+            } else {
+                node.setContributionValue(0.0);
             }
             Set<LatentGoal> children = node.getChildren();
             if (children != null && node.getBdiChildren() == null) {
