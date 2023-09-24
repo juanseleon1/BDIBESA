@@ -30,4 +30,8 @@ public class Mission {
         return parentId + "-" + childId;
     }
 
+    public boolean hasWeights() {
+        return weights != null && !weights.isEmpty();
+    }
+
 }
