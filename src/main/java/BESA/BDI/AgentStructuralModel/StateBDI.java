@@ -4,6 +4,7 @@ import rational.RationalState;
 import java.util.List;
 
 import BESA.BDI.AgentStructuralModel.AutonomyManager.AutonomyManager;
+import BESA.BDI.AgentStructuralModel.LatentGoalStructure.Mission;
 import rational.mapping.Believes;
 
 public class StateBDI extends RationalState {
@@ -18,6 +19,7 @@ public class StateBDI extends RationalState {
         this.endedTheDesiresMachine = true;
         this.inQueue = false;
     }
+
     public StateBDI(List<GoalBDI> goals, double threshold, Believes believes) {
         super(believes);
         this.machineBDIParams = new BDIMachineParams();
@@ -35,7 +37,7 @@ public class StateBDI extends RationalState {
     }
 
     public StateBDI(List<GoalBDI> goals, double threshold, Believes believes, AutonomyManager autonomyManager) {
-        this(goals,threshold, believes);
+        this(goals, threshold, believes);
         this.machineBDIParams.setAutonomyManager(autonomyManager);
     }
 
@@ -49,6 +51,7 @@ public class StateBDI extends RationalState {
     public StateBDI(BDIMachineParams machineBDIParams, Believes believes, double threshold) {
         super(believes);
         this.machineBDIParams = machineBDIParams;
+        this.machineBDIParams.setLatentThreshold(threshold);
         this.machineBDIParams.setNeedThreshold(threshold);
         this.machineBDIParams.setDutyThreshold(threshold);
         this.machineBDIParams.setOportunityThreshold(threshold);
@@ -83,12 +86,12 @@ public class StateBDI extends RationalState {
         this.inQueue = inQueue;
     }
 
-    public double getLatentInfluence(GoalBDI goal) {
-        return machineBDIParams.getLatentGoalManager().calculateExtraBoost(goal);
+    public synchronized boolean performAutonomyChecks(GoalBDI goalBDI, Believes beliefs) {
+        return machineBDIParams.getAutonomyManager().performAutonomyChecks(goalBDI, beliefs);
     }
 
-    public boolean performAutonomyChecks(GoalBDI goalBDI, Believes beliefs) {
-        return machineBDIParams.getAutonomyManager().performAutonomyChecks(goalBDI, beliefs);
+    public synchronized void setCurrentMission(Mission mission) {
+        machineBDIParams.setCurrentMission(mission);
     }
 
 }

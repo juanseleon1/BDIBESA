@@ -6,8 +6,12 @@
  */
 package BESA.BDI.AgentStructuralModel;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import BESA.BDI.AgentStructuralModel.Functions.ContributionComparator;
-import BESA.BDI.AgentStructuralModel.LatentGoalStructure.Goal;
+import BESA.BDI.AgentStructuralModel.LatentGoalStructure.LatentGoal;
+import BESA.BDI.AgentStructuralModel.LatentGoalStructure.Mission;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
 import rational.RationalRole;
 import rational.mapping.Believes;
@@ -22,7 +26,7 @@ import rational.mapping.Believes;
  * @version 2.0, 11/01/11
  * @since JDK1.0
  */
-public abstract class GoalBDI extends Goal implements BDIEvaluable, Comparable<GoalBDI> {
+public abstract class GoalBDI implements BDIEvaluable, Comparable<GoalBDI> {
 
     private long id;
     private double plausibilityLevel;
@@ -34,12 +38,14 @@ public abstract class GoalBDI extends Goal implements BDIEvaluable, Comparable<G
     private GoalBDITypes type;
     private boolean succeed;
     private boolean isAuthorized;
+    private Set<LatentGoal> parents;
 
     public GoalBDI(long id, RationalRole role, String description, GoalBDITypes type) {
         this.id = id;
         this.role = role;
         this.description = description;
         this.type = type;
+        this.parents = new HashSet<>();
     }
 
     public boolean isSucceed() {
@@ -183,13 +189,18 @@ public abstract class GoalBDI extends Goal implements BDIEvaluable, Comparable<G
         return hash;
     }
 
-    public double evaluateCompositeContribution(StateBDI stateBDI) throws KernellAgentEventExceptionBESA {
-        return this.evaluateContribution(stateBDI) + stateBDI.getLatentInfluence(this);
-    }
-
     @Override
-    public void addChildren(Goal goal) {
-        System.out.println("Cant add children to a GoalBDI object");
+    public double evaluateCompositeContribution(StateBDI stateBDI) throws KernellAgentEventExceptionBESA {
+        Mission mission = stateBDI.getMachineBDIParams().getCurrentMission();
+        double parentContribution = 0;
+        double baseContribution = this.evaluateContribution(stateBDI);
+        if (parents != null) {
+            for (LatentGoal parent : parents) {
+                parentContribution += parent.getContributionValue() * mission.getWeight(parent.getId(), this.getId());
+            }
+        }
+        baseContribution *= 1 + parentContribution;
+        return baseContribution;
     }
 
     public boolean hasAutonomy(StateBDI stateBDI, Believes believes) {
@@ -202,6 +213,18 @@ public abstract class GoalBDI extends Goal implements BDIEvaluable, Comparable<G
 
     public void setAuthorized(boolean isAuthorized) {
         this.isAuthorized = isAuthorized;
+    }
+
+    public Set<LatentGoal> getParents() {
+        return parents;
+    }
+
+    public void setParents(Set<LatentGoal> parents) {
+        this.parents = parents;
+    }
+
+    public void addParent(LatentGoal parent) {
+        this.parents.add(parent);
     }
 
 }

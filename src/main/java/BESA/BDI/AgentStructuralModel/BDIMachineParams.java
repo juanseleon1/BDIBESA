@@ -7,38 +7,45 @@
 package BESA.BDI.AgentStructuralModel;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import BESA.BDI.AgentStructuralModel.Agent.LatentGoalStructure;
 import BESA.BDI.AgentStructuralModel.AutonomyManager.AutonomyManager;
-import BESA.BDI.AgentStructuralModel.LatentGoalStructure.LatentGoalManager;
-
+import BESA.BDI.AgentStructuralModel.LatentGoalStructure.Mission;
 
 /**
- * <p>Class that contains some params value for the BDI machine</p>
- * @author  SIDRe - Pontificia Universidad Javeriana
- * @author  Takina  - Pontificia Universidad Javeriana
+ * <p>
+ * Class that contains some params value for the BDI machine
+ * </p>
+ * 
+ * @author SIDRe - Pontificia Universidad Javeriana
+ * @author Takina - Pontificia Universidad Javeriana
  * @version 2.0, 11/01/11
- * @since   JDK1.0
+ * @since JDK1.0
  */
 public class BDIMachineParams {
 
     /** structure that represents the pyramid for the desired priority */
     private DesireHierarchyPyramid pyramidGoals;
-    /** list of goals that the agent knows*/
+    /** list of goals that the agent knows */
     private PotencialGoalStructure potencialGoals;
-    /** main goal for the BDI agent*/
+    /** main goal for the BDI agent */
     private GoalBDI mainGoal;
-    /** intention goal for the BDI agent*/
+    /** intention goal for the BDI agent */
     private GoalBDI intention;
-    // Latent Goal Manager
-    private LatentGoalManager latentGoalManager;
     // Autonomy Goal Manager
     private AutonomyManager autonomyManager;
     // Hierachical Goal Structure
     private LatentGoalStructure goalStructure;
+    // Default Mission
+    private Mission defaultMission;
+    // Current Mission
+    private Mission currentMission;
+    // List of Missions
+    private List<Mission> missions;
 
-    /** Thresholds for the goal operations*/
+    /** Thresholds for the goal operations */
     private double dutyThreshold;
     private double survivalThreshold;
     private double oportunityThreshold;
@@ -46,28 +53,31 @@ public class BDIMachineParams {
     private double needThreshold;
     private double attentionCycleThreshold;
     private double mainGoalThreshold;
+    private double latentGoalThreshold;
 
     public BDIMachineParams() {
         pyramidGoals = new DesireHierarchyPyramid();
         potencialGoals = new PotencialGoalStructure();
-        latentGoalManager = new LatentGoalManager();
         autonomyManager = new AutonomyManager();
     }
 
-    public BDIMachineParams(AutonomyManager autonomyManager) {
+    public BDIMachineParams(AutonomyManager autonomyManager, Mission defaultMission) {
         this();
         this.autonomyManager = autonomyManager;
+        this.defaultMission = defaultMission;
     }
 
-    public BDIMachineParams(double dutyThreshold, double survivalThreshold, double oportunityThreshold, double requirementThreshold, double needThreshold, double attentionCycleThreshold ) {
+    public BDIMachineParams(double latentGoalThreshold, double dutyThreshold, double survivalThreshold,
+            double oportunityThreshold, double requirementThreshold, double needThreshold,
+            double attentionCycleThreshold) {
+        this.latentGoalThreshold = latentGoalThreshold;
         this.dutyThreshold = dutyThreshold;
         this.survivalThreshold = survivalThreshold;
         this.oportunityThreshold = oportunityThreshold;
         this.requirementThreshold = requirementThreshold;
         this.needThreshold = needThreshold;
-        this.attentionCycleThreshold= attentionCycleThreshold;
+        this.attentionCycleThreshold = attentionCycleThreshold;
         this.pyramidGoals = new DesireHierarchyPyramid();
-        this.latentGoalManager = new LatentGoalManager();
         this.autonomyManager = new AutonomyManager();
     }
 
@@ -135,6 +145,14 @@ public class BDIMachineParams {
         this.attentionCycleThreshold = attentionCycleThreshold;
     }
 
+    public double getLatentThreshold() {
+        return latentGoalThreshold;
+    }
+
+    public void setLatentThreshold(double latentGoalThreshold) {
+        this.latentGoalThreshold = latentGoalThreshold;
+    }
+
     public GoalBDI getMainGoal() {
         return mainGoal;
     }
@@ -150,7 +168,7 @@ public class BDIMachineParams {
     public void setMainGoalThreshold(double mainGoalThreshold) {
         this.mainGoalThreshold = mainGoalThreshold;
     }
-    
+
     public GoalBDI getIntention() {
         return intention;
     }
@@ -159,40 +177,55 @@ public class BDIMachineParams {
         this.intention = intention;
     }
 
+    public Mission getDefaultMission() {
+        return defaultMission;
+    }
+
+    public void setDefaultMission(Mission defaultMission) {
+        this.defaultMission = defaultMission;
+    }
+
     /**
-     * <p>method that allows to delete an elmento from the pyramid using its id</p>
-     * @param goalId 
+     * <p>
+     * method that allows to delete an elmento from the pyramid using its id
+     * </p>
+     * 
+     * @param goalId
      */
     public void deleteFromPyramid(long goalId) {
-        
+
         for (Set<GoalBDI> set : this.getPyramidGoals().getGeneralHerarchyList()) {
             Iterator<GoalBDI> setIterator = set.iterator();
             while (setIterator.hasNext()) {
                 GoalBDI currentElement = setIterator.next();
-                if (currentElement.getId() == goalId) {                  
+                if (currentElement.getId() == goalId) {
                     setIterator.remove();
                 }
             }
         }
     }
-    
-    public void addPotentialGoal(GoalBDI goal){
-        switch (goal.getType()){
-            case SURVIVAL: this.potencialGoals.getSurvivalGoalsList().add(goal); break;
-            case DUTY: this.potencialGoals.getDutyGoalsList().add(goal); break;
-            case OPORTUNITY:  this.potencialGoals.getOportunityGoalsList().add(goal); break;
-            case REQUIREMENT: this.potencialGoals.getRequirementGoalsList().add(goal); break;
-            case NEED: this.potencialGoals.getNeedGoalsList().add(goal); break;
-            case ATTENTION_CYCLE: this.potencialGoals.getAttentionCycleGoalsList().add(goal); break;
+
+    public void addPotentialGoal(GoalBDI goal) {
+        switch (goal.getType()) {
+            case SURVIVAL:
+                this.potencialGoals.getSurvivalGoalsList().add(goal);
+                break;
+            case DUTY:
+                this.potencialGoals.getDutyGoalsList().add(goal);
+                break;
+            case OPORTUNITY:
+                this.potencialGoals.getOportunityGoalsList().add(goal);
+                break;
+            case REQUIREMENT:
+                this.potencialGoals.getRequirementGoalsList().add(goal);
+                break;
+            case NEED:
+                this.potencialGoals.getNeedGoalsList().add(goal);
+                break;
+            case ATTENTION_CYCLE:
+                this.potencialGoals.getAttentionCycleGoalsList().add(goal);
+                break;
         }
-    }
-
-    public LatentGoalManager getLatentGoalManager() {
-        return latentGoalManager;
-    }
-
-    public void setLatentGoalManager(LatentGoalManager latentGoalManager) {
-        this.latentGoalManager = latentGoalManager;
     }
 
     public AutonomyManager getAutonomyManager() {
@@ -209,6 +242,26 @@ public class BDIMachineParams {
 
     public void setGoalStructure(LatentGoalStructure goalStructure) {
         this.goalStructure = goalStructure;
+    }
+
+    public Mission getCurrentMission() {
+        Mission mission = currentMission;
+        if (mission == null) {
+            mission = defaultMission;
+        }
+        return mission;
+    }
+
+    public void setCurrentMission(Mission currentMission) {
+        this.currentMission = currentMission;
+    }
+
+    public List<Mission> getMissions() {
+        return missions;
+    }
+
+    public void setMissions(List<Mission> missions) {
+        this.missions = missions;
     }
 
 }

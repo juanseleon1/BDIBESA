@@ -1,31 +1,30 @@
 package BESA.BDI.AgentStructuralModel.LatentGoalStructure;
 
 import java.io.Serializable;
-import java.util.List;
 
-public class Goal implements Serializable{
+import BESA.BDI.AgentStructuralModel.StateBDI;
+import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
+import rational.mapping.Believes;
 
-    private Goal parent;
-    private List<Goal> children;
+public interface Goal extends Serializable{
 
-    
-    public Goal getParent() {
-        return parent;
-    }
-    public void setParent(Goal parent) {
-        this.parent = parent;
-    }
-    public List<Goal> getChildren() {
-        return children;
-    }
-    public void setChildren(List<Goal> children) {
-        this.children = children;
-    }
+    /**
+     * <p>
+     * detect the goal for the BDI flow
+     * </p>
+     * 
+     * @return
+     */
+    public double detectGoal(Believes believes) throws KernellAgentEventExceptionBESA;
 
-    public void addChildren(Goal goal){
-        if(!children.contains(goal)){
-            children.add(goal);
-        }
-    }
+    /**
+     * <p>
+     * evaluate the contribution value for a Goal
+     * </p>
+     * 
+     * @return
+     */
+    public double evaluateContribution(StateBDI stateBDI) throws KernellAgentEventExceptionBESA;
 
+    public double evaluateCompositeContribution(StateBDI stateBDI) throws KernellAgentEventExceptionBESA;
 }

@@ -7,6 +7,8 @@
 package BESA.BDI.DBIDecisionMachine;
 
 import BESA.BDI.AgentStructuralModel.Agent.AgentBDI;
+import BESA.BDI.AgentStructuralModel.Agent.GoalStructureUtils;
+import BESA.BDI.AgentStructuralModel.LatentGoalStructure.LatentGoal;
 import BESA.BDI.AgentStructuralModel.BDIMachineParams;
 import BESA.BDI.AgentStructuralModel.GoalBDI;
 import BESA.BDI.AgentStructuralModel.PotencialGoalStructure;
@@ -37,6 +39,10 @@ public class DesireToIntentionInstantiationGuard extends GuardBESA {
         try {
             Believes believes = stateBDI.getBelieves().clone();
             BDIMachineParams paramsBDI = stateBDI.getMachineBDIParams();
+            LatentGoal root = paramsBDI.getGoalStructure().getRoot();
+            if(root != null){
+                GoalStructureUtils.calculateLatentGoalContribution(root, paramsBDI.getLatentThreshold(), stateBDI);
+            }
             paramsBDI.getPyramidGoals().clear();
             PotencialGoalStructure potencialGoalStructure = paramsBDI.getPotencialGoals();
             /** detect each potencial goal*/

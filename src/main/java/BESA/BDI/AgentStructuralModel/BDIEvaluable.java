@@ -7,6 +7,7 @@
 package BESA.BDI.AgentStructuralModel;
 
 
+import BESA.BDI.AgentStructuralModel.LatentGoalStructure.Goal;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
 import rational.mapping.Believes;
 
@@ -17,7 +18,7 @@ import rational.mapping.Believes;
  * @version 2.0, 11/01/11
  * @since   JDK1.0
  */
- public interface BDIEvaluable {
+ public interface BDIEvaluable extends Goal{
 
     /**
      * <p>evaluate the viability for a Goal</p>
@@ -26,22 +27,10 @@ import rational.mapping.Believes;
     public double evaluateViability(Believes believes) throws KernellAgentEventExceptionBESA;
 
     /**
-     * <p>detect the goal for the BDI flow</p>
-     * @return
-     */
-    public double detectGoal(Believes believes) throws KernellAgentEventExceptionBESA;
-
-    /**
      * <p>evaluate the plausibility (legal) for the goal</p>
      * @return 
      */
     public double evaluatePlausibility(Believes believes) throws KernellAgentEventExceptionBESA;
-
-    /**
-     * <p>evaluate the contribution value for a Goal</p>
-     * @return
-     */
-    public double evaluateContribution(StateBDI stateBDI) throws KernellAgentEventExceptionBESA;
 
     /**
      * <p>evaluate the unlegality result prediction</p>

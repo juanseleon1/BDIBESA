@@ -1,47 +1,64 @@
 package BESA.BDI.AgentStructuralModel.Agent;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import BESA.BDI.AgentStructuralModel.GoalBDI;
-import BESA.BDI.AgentStructuralModel.LatentGoalStructure.Goal;
 import BESA.BDI.AgentStructuralModel.LatentGoalStructure.LatentGoal;
 
 public class LatentGoalStructure {
-    private HashSet<GoalBDI> bdiGoals;
-    private HashSet<LatentGoal> latentGoals;
+    private Set<GoalBDI> bdiGoals;
+    private Set<LatentGoal> latentGoals;
+    private LatentGoal root;
 
     public LatentGoalStructure() {
         bdiGoals = new HashSet<>();
         latentGoals = new HashSet<>();
     }
 
-    public HashSet<GoalBDI> getBdiGoals() {
+    public Set<GoalBDI> getBdiGoals() {
         return bdiGoals;
     }
 
-    public HashSet<LatentGoal> getLatentGoals() {
+    public Set<LatentGoal> getLatentGoals() {
         return latentGoals;
     }
-    public void addOrphanBDIGoal(GoalBDI child){
+
+    public void addOrphanBDIGoal(GoalBDI child) {
         addIfNotPresent(bdiGoals, child);
     }
 
-    public void addRelation(Goal parent, Goal child) {
-        if (child instanceof GoalBDI) {
-            addIfNotPresent(bdiGoals, (GoalBDI) child);
-        } else if (child instanceof LatentGoal) {
-            addIfNotPresent(latentGoals, (LatentGoal) child);
-        }
-        addIfNotPresent(latentGoals, (LatentGoal) parent);
-
+    public void addRelation(LatentGoal parent, LatentGoal child) {
+        addIfNotPresent(latentGoals, child);
+        addIfNotPresent(latentGoals, parent);
         child.setParent(parent);
         parent.addChildren(child);
     }
 
-    private <T> void addIfNotPresent(HashSet<T> set, T item) {
+    public void addRelation(LatentGoal parent, GoalBDI child) {
+        addIfNotPresent(bdiGoals, child);
+        addIfNotPresent(latentGoals, parent);
+        child.addParent(parent);
+        parent.addBdiChildren(child);
+    }
+
+    private <T> void addIfNotPresent(Set<T> set, T item) {
         if (!set.contains(item)) {
             set.add(item);
         }
     }
 
+    public LatentGoal getRoot() {
+        LatentGoal aux = null;
+        if (root != null) {
+            return root;
+        }
+        for (LatentGoal goal : latentGoals) {
+            if (goal.getParent() == null) {
+                aux = goal;
+                break;
+            }
+        }
+        return aux;
+    }
 }
