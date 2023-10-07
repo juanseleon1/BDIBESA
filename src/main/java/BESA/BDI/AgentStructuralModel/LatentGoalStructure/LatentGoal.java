@@ -1,10 +1,12 @@
 package BESA.BDI.AgentStructuralModel.LatentGoalStructure;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import BESA.BDI.AgentStructuralModel.GoalBDI;
 import BESA.BDI.AgentStructuralModel.StateBDI;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
+import rational.mapping.Believes;
 
 public abstract class LatentGoal implements Goal {
     private LatentGoal parent;
@@ -13,10 +15,12 @@ public abstract class LatentGoal implements Goal {
     private double contributionValue;
     private double detectionValue;
     private int id;
+    private boolean isAuthorized;
 
     public LatentGoal(int id) {
         this.id = id;
-
+        this.children = new HashSet<>();
+        this.bdiChildren = new HashSet<>();
     }
 
     public LatentGoal getParent() {
@@ -78,8 +82,46 @@ public abstract class LatentGoal implements Goal {
         return contribution;
     }
 
+    @Override
+    public double detectCompositeGoal(Believes believes) throws KernellAgentEventExceptionBESA {
+        return isAuthorized() ? detectGoal(believes) : 0;
+    }
+
+    public boolean isAuthorized() {
+        return isAuthorized;
+    }
+
+    public void setAuthorized(boolean isAuthorized) {
+        this.isAuthorized = isAuthorized;
+    }
+
     public int getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" Autorizado?: ");
+        sb.append(isAuthorized ? "Si" : "No");
+        sb.append(" Contribucion: ");
+        sb.append(contributionValue);
+        sb.append("\n");
+        if (parent != null) {
+            sb.append("Afectado Por: ");
+            sb.append(parent.getClass().getSimpleName());
+            sb.append(" ");
+        }
+        sb.append("\n");
+        if (bdiChildren != null) {
+            sb.append("afecta a: ");
+            bdiChildren.forEach(t -> {
+                sb.append(t.getClass().getSimpleName());
+                sb.append(" ");
+            });
+        }
+        return sb.toString();
     }
 
 }

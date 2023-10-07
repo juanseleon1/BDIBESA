@@ -13,6 +13,7 @@ import BESA.BDI.AgentStructuralModel.Functions.ContributionComparator;
 import BESA.BDI.AgentStructuralModel.LatentGoalStructure.LatentGoal;
 import BESA.BDI.AgentStructuralModel.LatentGoalStructure.AgentRole;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
+import BESA.Log.ReportBESA;
 import rational.RationalRole;
 import rational.mapping.Believes;
 
@@ -46,6 +47,7 @@ public abstract class GoalBDI implements BDIEvaluable, Comparable<GoalBDI> {
         this.description = description;
         this.type = type;
         this.parents = new HashSet<>();
+        this.setAuthorized(true);
     }
 
     public boolean isSucceed() {
@@ -203,7 +205,15 @@ public abstract class GoalBDI implements BDIEvaluable, Comparable<GoalBDI> {
         return baseContribution;
     }
 
+    
+
+    @Override
+    public double detectCompositeGoal(Believes believes) throws KernellAgentEventExceptionBESA {
+        return isAuthorized() ? detectGoal(believes) : 0;
+    }
+
     public boolean hasAutonomy(StateBDI stateBDI, Believes believes) {
+        ReportBESA.debug("CHECKING IT HAS AUTONOMY"+getClass());
         return stateBDI.performAutonomyChecks(this, believes);
     }
 
@@ -227,4 +237,13 @@ public abstract class GoalBDI implements BDIEvaluable, Comparable<GoalBDI> {
         this.parents.add(parent);
     }
 
+    @Override
+    public String toString() {
+        return "GoalBDI"+this.getClass().getSimpleName()+" [id=" + id + ", plausibilityLevel=" + plausibilityLevel + ", viabilityValue=" + viabilityValue
+                + ", contributionValue=" + contributionValue + ", detectionValue=" + detectionValue + ", role=" + role
+                + ", description=" + description + ", type=" + type + ", succeed=" + succeed + ", isAuthorized="
+                + isAuthorized + "]";
+    }
+
+    
 }

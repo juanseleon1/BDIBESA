@@ -49,16 +49,10 @@ public class LatentGoalStructure {
     }
 
     public LatentGoal getRoot() {
-        LatentGoal aux = null;
-        if (root != null) {
-            return root;
-        }
-        for (LatentGoal goal : latentGoals) {
-            if (goal.getParent() == null) {
-                aux = goal;
-                break;
-            }
-        }
-        return aux;
+        return root;
+    }
+
+    public void setRoot(LatentGoal root) {
+        this.root = root;
     }
 }

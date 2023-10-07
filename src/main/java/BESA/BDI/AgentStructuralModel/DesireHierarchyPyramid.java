@@ -224,4 +224,25 @@ public class DesireHierarchyPyramid implements Serializable {
         }
         return resultValue.toString();
     }
+
+
+    @Override
+    public DesireHierarchyPyramid clone() {
+        try {
+            DesireHierarchyPyramid clone = (DesireHierarchyPyramid) super.clone();
+            clone.survivalGoalsList = new TreeSet<>(this.survivalGoalsList);
+            clone.dutyGoalsList = new TreeSet<>(this.dutyGoalsList);
+            clone.oportunityGoalsList = new TreeSet<>(this.oportunityGoalsList);
+            clone.requirementGoalsList = new TreeSet<>(this.requirementGoalsList);
+            clone.needGoalsList = new TreeSet<>(this.needGoalsList);
+            clone.attentionCycleGoalsList = new TreeSet<>(this.attentionCycleGoalsList);
+            clone.generalHerarchyList = new ArrayList<>(this.generalHerarchyList.size());
+            for (SortedSet<GoalBDI> set : this.generalHerarchyList) {
+                clone.generalHerarchyList.add(new TreeSet<>(set));
+            }
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

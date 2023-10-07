@@ -48,7 +48,7 @@ public abstract class AgentBDI extends RationalAgent {
 
     public AgentBDI(String alias, Believes believes, LatentGoalStructure goalStruct, AutonomyManager autonomyManager ,double threshold,
             StructBESA structAgent) throws KernelAgentExceptionBESA, ExceptionBESA {
-        super(alias, new StateBDI(new ArrayList<>(goalStruct.getBdiGoals()), threshold, believes),
+        super(alias, new StateBDI(goalStruct,new ArrayList<>(goalStruct.getBdiGoals()), threshold, believes, autonomyManager),
                 setupBDIStruct(structAgent), 0.91);
         this.goalStruct = goalStruct;
     }

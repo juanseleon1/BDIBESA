@@ -264,4 +264,21 @@ public class BDIMachineParams {
         this.agentRoles = agentRoles;
     }
 
+    @Override
+    public BDIMachineParams clone() {
+        try {
+            BDIMachineParams clone = (BDIMachineParams) super.clone();
+            clone.pyramidGoals = this.pyramidGoals.clone();
+            clone.potencialGoals = this.potencialGoals;
+            clone.mainGoal = this.mainGoal;
+            clone.intention = this.intention;
+            clone.goalStructure = this.goalStructure;
+            clone.defaultAgentRole = this.defaultAgentRole;
+            clone.currentAgentRole = this.currentAgentRole;
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
 }

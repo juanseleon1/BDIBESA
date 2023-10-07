@@ -83,6 +83,12 @@ public class PotencialGoalStructure implements Serializable {
     public void setAttentionCycleGoalsList(SortedSet<GoalBDI> attentionCycleGoalsList) {
         this.attentionCycleGoalsList = attentionCycleGoalsList;
     }
-    
+
+    @Override
+    public String toString() {
+        return "PotencialGoalStructure [survivalGoalsList=" + survivalGoalsList + ", dutyGoalsList=" + dutyGoalsList
+                + ", oportunityGoalsList=" + oportunityGoalsList + ", requirementGoalsList=" + requirementGoalsList
+                + ", needGoalsList=" + needGoalsList + ", attentionCycleGoalsList=" + attentionCycleGoalsList + "]";
+    }
     
 }

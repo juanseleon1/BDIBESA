@@ -8,6 +8,7 @@ import rational.mapping.Believes;
 
 public interface Goal extends Serializable{
 
+    public double detectCompositeGoal(Believes believes) throws KernellAgentEventExceptionBESA;
     /**
      * <p>
      * detect the goal for the BDI flow

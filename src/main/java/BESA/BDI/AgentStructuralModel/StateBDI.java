@@ -3,6 +3,7 @@ package BESA.BDI.AgentStructuralModel;
 import rational.RationalState;
 import java.util.List;
 
+import BESA.BDI.AgentStructuralModel.Agent.LatentGoalStructure;
 import BESA.BDI.AgentStructuralModel.AutonomyManager.AutonomyManager;
 import BESA.BDI.AgentStructuralModel.LatentGoalStructure.AgentRole;
 import rational.mapping.Believes;
@@ -36,9 +37,10 @@ public class StateBDI extends RationalState {
         this.inQueue = false;
     }
 
-    public StateBDI(List<GoalBDI> goals, double threshold, Believes believes, AutonomyManager autonomyManager) {
+    public StateBDI(LatentGoalStructure goalStruct, List<GoalBDI> goals, double threshold, Believes believes, AutonomyManager autonomyManager) {
         this(goals, threshold, believes);
         this.machineBDIParams.setAutonomyManager(autonomyManager);
+        this.machineBDIParams.setGoalStructure(goalStruct);
     }
 
     public StateBDI(BDIMachineParams machineBDIParams, Believes believes) {

@@ -45,10 +45,11 @@ public class DesireToIntentionInstantiationGuard extends GuardBESA {
             }
             paramsBDI.getPyramidGoals().clear();
             PotencialGoalStructure potencialGoalStructure = paramsBDI.getPotencialGoals();
+            ReportBESA.debug("PYRAMIDGOALSPUTA "+ potencialGoalStructure);
             /** detect each potencial goal*/
             /** duties*/
             for (GoalBDI dutyGoal : potencialGoalStructure.getDutyGoalsList()) {
-                dutyGoal.setDetectionValue(dutyGoal.detectGoal(believes));
+                dutyGoal.setDetectionValue(dutyGoal.detectCompositeGoal(believes));
                 if (dutyGoal.getDetectionValue() > paramsBDI.getDutyThreshold()) {
                     dutyGoal.setPlausibilityLevel(dutyGoal.evaluatePlausibility(believes));
                     if (dutyGoal.getPlausibilityLevel() > paramsBDI.getDutyThreshold()) {
@@ -64,7 +65,7 @@ public class DesireToIntentionInstantiationGuard extends GuardBESA {
 
             /** needs*/
             for (GoalBDI needGoal : potencialGoalStructure.getNeedGoalsList()) {
-                needGoal.setDetectionValue(needGoal.detectGoal(believes));
+                needGoal.setDetectionValue(needGoal.detectCompositeGoal(believes));
                 if (needGoal.getDetectionValue() > paramsBDI.getNeedThreshold()) {
                     needGoal.setPlausibilityLevel(needGoal.evaluatePlausibility(believes));
                     if (needGoal.getPlausibilityLevel() > paramsBDI.getNeedThreshold()) {
@@ -80,7 +81,7 @@ public class DesireToIntentionInstantiationGuard extends GuardBESA {
 
             /** oportunities*/
             for (GoalBDI oportunityGoal : potencialGoalStructure.getOportunityGoalsList()) {
-                oportunityGoal.setDetectionValue(oportunityGoal.detectGoal(believes));
+                oportunityGoal.setDetectionValue(oportunityGoal.detectCompositeGoal(believes));
                 if (oportunityGoal.getDetectionValue() > paramsBDI.getOportunityThreshold()) {
                     oportunityGoal.setPlausibilityLevel(oportunityGoal.evaluatePlausibility(believes));
                     if (oportunityGoal.getPlausibilityLevel() > paramsBDI.getOportunityThreshold()) {
@@ -96,7 +97,7 @@ public class DesireToIntentionInstantiationGuard extends GuardBESA {
 
             /** requiremets*/
             for (GoalBDI requirementGoal : potencialGoalStructure.getRequirementGoalsList()) {
-                requirementGoal.setDetectionValue(requirementGoal.detectGoal(believes));
+                requirementGoal.setDetectionValue(requirementGoal.detectCompositeGoal(believes));
                 if (requirementGoal.getDetectionValue() > paramsBDI.getRequirementThreshold()) {
                     requirementGoal.setPlausibilityLevel(requirementGoal.evaluatePlausibility(believes));
                     if (requirementGoal.getPlausibilityLevel() > paramsBDI.getRequirementThreshold()) {
@@ -113,7 +114,7 @@ public class DesireToIntentionInstantiationGuard extends GuardBESA {
 
             /** survival*/
             for (GoalBDI survivalGoal : potencialGoalStructure.getSurvivalGoalsList()) {
-                survivalGoal.setDetectionValue(survivalGoal.detectGoal(believes));
+                survivalGoal.setDetectionValue(survivalGoal.detectCompositeGoal(believes));
                 if (survivalGoal.getDetectionValue() > paramsBDI.getSurvivalThreshold()) {
                     survivalGoal.setPlausibilityLevel(survivalGoal.evaluatePlausibility(believes));
                     if (survivalGoal.getPlausibilityLevel() > paramsBDI.getSurvivalThreshold()) {
@@ -129,7 +130,7 @@ public class DesireToIntentionInstantiationGuard extends GuardBESA {
             
             /** AttentionCycle*/
             for (GoalBDI attentionCycle : potencialGoalStructure.getAttentionCycleGoalsList()) {
-                attentionCycle.setDetectionValue(attentionCycle.detectGoal(believes));
+                attentionCycle.setDetectionValue(attentionCycle.detectCompositeGoal(believes));
                 if (attentionCycle.getDetectionValue() > paramsBDI.getAttentionCycleThreshold()) {
                     attentionCycle.setPlausibilityLevel(attentionCycle.evaluatePlausibility(believes));
                     if (attentionCycle.getPlausibilityLevel() > paramsBDI.getAttentionCycleThreshold()) {
@@ -142,9 +143,10 @@ public class DesireToIntentionInstantiationGuard extends GuardBESA {
                 }
 
             }
-            
+            ReportBESA.debug("GOALSSSSJLEON "+ paramsBDI.getPyramidGoals());
             paramsBDI.setIntention(paramsBDI.getPyramidGoals().getCurrentIntentionGoal());
-            if (paramsBDI.getIntention() != null) {               
+            if (paramsBDI.getIntention() != null) {   
+                ReportBESA.debug("INTENTION IS NOT NULL");            
                 if (paramsBDI.getIntention().evaluateMappingViability(paramsBDI, believes)) {
                     if (paramsBDI.getIntention().predictResultUnlegality(stateBDI)) {
                         if(paramsBDI.getIntention().hasAutonomy(stateBDI, believes)){
