@@ -205,15 +205,13 @@ public abstract class GoalBDI implements BDIEvaluable, Comparable<GoalBDI> {
         return baseContribution;
     }
 
-    
-
     @Override
     public double detectCompositeGoal(Believes believes) throws KernellAgentEventExceptionBESA {
         return isAuthorized() ? detectGoal(believes) : 0;
     }
 
     public boolean hasAutonomy(StateBDI stateBDI, Believes believes) {
-        ReportBESA.debug("CHECKING IT HAS AUTONOMY"+getClass());
+        // ReportBESA.debug("CHECKING IT HAS AUTONOMY"+getClass());
         return stateBDI.performAutonomyChecks(this, believes);
     }
 
@@ -239,11 +237,9 @@ public abstract class GoalBDI implements BDIEvaluable, Comparable<GoalBDI> {
 
     @Override
     public String toString() {
-        return "GoalBDI"+this.getClass().getSimpleName()+" [id=" + id + ", plausibilityLevel=" + plausibilityLevel + ", viabilityValue=" + viabilityValue
-                + ", contributionValue=" + contributionValue + ", detectionValue=" + detectionValue + ", role=" + role
-                + ", description=" + description + ", type=" + type + ", succeed=" + succeed + ", isAuthorized="
-                + isAuthorized + "]";
+        return this.getClass().getSimpleName() 
+                + ", Contribución: " + contributionValue + ", Valor De Activacion: " + detectionValue
+                + ", Esta Autorizada: " + isAuthorized ;
     }
 
-    
 }

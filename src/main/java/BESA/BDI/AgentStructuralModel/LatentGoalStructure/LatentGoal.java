@@ -21,6 +21,7 @@ public abstract class LatentGoal implements Goal {
         this.id = id;
         this.children = new HashSet<>();
         this.bdiChildren = new HashSet<>();
+        this.isAuthorized = true;
     }
 
     public LatentGoal getParent() {

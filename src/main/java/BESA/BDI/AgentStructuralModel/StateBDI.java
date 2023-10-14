@@ -37,7 +37,8 @@ public class StateBDI extends RationalState {
         this.inQueue = false;
     }
 
-    public StateBDI(LatentGoalStructure goalStruct, List<GoalBDI> goals, double threshold, Believes believes, AutonomyManager autonomyManager) {
+    public StateBDI(LatentGoalStructure goalStruct, List<GoalBDI> goals, double threshold, Believes believes,
+            AutonomyManager autonomyManager) {
         this(goals, threshold, believes);
         this.machineBDIParams.setAutonomyManager(autonomyManager);
         this.machineBDIParams.setGoalStructure(goalStruct);
@@ -94,6 +95,10 @@ public class StateBDI extends RationalState {
 
     public synchronized void setCurrentAgentRole(AgentRole agentRole) {
         machineBDIParams.setCurrentAgentRole(agentRole);
+    }
+
+    public AgentRole getAgentRole(String role) {
+        return machineBDIParams.getAgentRole(role);
     }
 
 }

@@ -7,7 +7,7 @@
 package BESA.BDI.AgentStructuralModel;
 
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import BESA.BDI.AgentStructuralModel.Agent.LatentGoalStructure;
@@ -43,7 +43,7 @@ public class BDIMachineParams {
     // Current AgentRole
     private AgentRole currentAgentRole;
     // List of AgentRoles
-    private List<AgentRole> agentRoles;
+    private Map<String, AgentRole> agentRoles;
 
     /** Thresholds for the goal operations */
     private double dutyThreshold;
@@ -244,7 +244,7 @@ public class BDIMachineParams {
         this.goalStructure = goalStructure;
     }
 
-    public AgentRole getCurrentAgentRole() {
+    public synchronized AgentRole getCurrentAgentRole() {
         AgentRole agentRole = currentAgentRole;
         if (agentRole == null) {
             agentRole = defaultAgentRole;
@@ -252,16 +252,40 @@ public class BDIMachineParams {
         return agentRole;
     }
 
-    public void setCurrentAgentRole(AgentRole currentAgentRole) {
+    public synchronized void setCurrentAgentRole(AgentRole currentAgentRole) {
         this.currentAgentRole = currentAgentRole;
+        if (currentAgentRole.hasGoalChanges()) {
+            applyGoalChanges(currentAgentRole.getActiveGoals());
+        }
     }
 
-    public List<AgentRole> getAgentRoles() {
+    public AgentRole getAgentRole(String name) {
+        return agentRoles.get(name);
+    }
+
+    public Map<String, AgentRole> getAgentRoles() {
         return agentRoles;
     }
 
-    public void setAgentRoles(List<AgentRole> agentRoles) {
+    public void setAgentRoles(Map<String, AgentRole> agentRoles) {
         this.agentRoles = agentRoles;
+    }
+
+    public synchronized void applyGoalChanges(Map<Long, Boolean> changes) {
+        applyChangesPerLevel(changes, potencialGoals.getAttentionCycleGoalsList());
+        applyChangesPerLevel(changes, potencialGoals.getDutyGoalsList());
+        applyChangesPerLevel(changes, potencialGoals.getNeedGoalsList());
+        applyChangesPerLevel(changes, potencialGoals.getOportunityGoalsList());
+        applyChangesPerLevel(changes, potencialGoals.getRequirementGoalsList());
+        applyChangesPerLevel(changes, potencialGoals.getSurvivalGoalsList());
+    }
+
+    private synchronized void applyChangesPerLevel(Map<Long, Boolean> changes, Set<GoalBDI> goals) {
+        for (GoalBDI goal : goals) {
+            if (changes.containsKey(goal.getId())) {
+                goal.setAuthorized(changes.get(goal.getId()));
+            }
+        }
     }
 
     @Override

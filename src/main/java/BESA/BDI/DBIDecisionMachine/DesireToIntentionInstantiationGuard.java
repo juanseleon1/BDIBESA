@@ -45,7 +45,7 @@ public class DesireToIntentionInstantiationGuard extends GuardBESA {
             }
             paramsBDI.getPyramidGoals().clear();
             PotencialGoalStructure potencialGoalStructure = paramsBDI.getPotencialGoals();
-            ReportBESA.debug("PYRAMIDGOALSPUTA "+ potencialGoalStructure);
+            //ReportBESA.debug("PYRAMIDGOALSPUTA "+ potencialGoalStructure);
             /** detect each potencial goal*/
             /** duties*/
             for (GoalBDI dutyGoal : potencialGoalStructure.getDutyGoalsList()) {
@@ -143,10 +143,10 @@ public class DesireToIntentionInstantiationGuard extends GuardBESA {
                 }
 
             }
-            ReportBESA.debug("GOALSSSSJLEON "+ paramsBDI.getPyramidGoals());
+            //ReportBESA.debug("GOALSSSSJLEON "+ paramsBDI.getPyramidGoals());
             paramsBDI.setIntention(paramsBDI.getPyramidGoals().getCurrentIntentionGoal());
             if (paramsBDI.getIntention() != null) {   
-                ReportBESA.debug("INTENTION IS NOT NULL");            
+                //ReportBESA.debug("INTENTION IS NOT NULL");            
                 if (paramsBDI.getIntention().evaluateMappingViability(paramsBDI, believes)) {
                     if (paramsBDI.getIntention().predictResultUnlegality(stateBDI)) {
                         if(paramsBDI.getIntention().hasAutonomy(stateBDI, believes)){
@@ -159,7 +159,7 @@ public class DesireToIntentionInstantiationGuard extends GuardBESA {
             }
             
         } catch (ExceptionBESA e) {
-            ReportBESA.error(e.getMessage());
+            //ReportBESA.error(e.getMessage());
         } catch (Exception ex) {
             Logger.getLogger(DesireToIntentionInstantiationGuard.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -170,7 +170,7 @@ public class DesireToIntentionInstantiationGuard extends GuardBESA {
             agHandlerBESA = agentBDI.getAdmLocal().getHandlerByAlias(agentBDI.getAlias());
             agHandlerBESA.sendEvent(eventBesa);
         } catch (ExceptionBESA e) {
-            ReportBESA.error(e.getMessage());
+            //ReportBESA.error(e.getMessage());
         }
             
     }

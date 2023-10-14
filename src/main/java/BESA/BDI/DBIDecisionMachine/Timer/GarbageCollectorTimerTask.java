@@ -41,7 +41,7 @@ public class GarbageCollectorTimerTask extends TimerTask {
             AgHandlerBESA agHandlerBESA = admLocal.getHandlerByAlias(aliasAgent);
             agHandlerBESA.sendEvent(eventBesa);
         } catch (ExceptionBESA e) {
-            ReportBESA.info(e.getMessage());
+            //ReportBESA.info(e.getMessage());
         }
     }
 }

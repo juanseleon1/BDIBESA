@@ -86,9 +86,25 @@ public class PotencialGoalStructure implements Serializable {
 
     @Override
     public String toString() {
-        return "PotencialGoalStructure [survivalGoalsList=" + survivalGoalsList + ", dutyGoalsList=" + dutyGoalsList
-                + ", oportunityGoalsList=" + oportunityGoalsList + ", requirementGoalsList=" + requirementGoalsList
-                + ", needGoalsList=" + needGoalsList + ", attentionCycleGoalsList=" + attentionCycleGoalsList + "]";
+        return "Metas: \n" + 
+               "Lista de Metas de Supervivencia: " + parseList(survivalGoalsList) + "\n" +
+               "Lista de Metas de Deber: " + parseList(dutyGoalsList) + "\n" +
+               "Lista de Metas de Oportunidad: " + parseList(oportunityGoalsList) + "\n" +
+               "Lista de Metas de Requisito: " + parseList(requirementGoalsList) + "\n" +
+               "Lista de Metas de Necesidad: " + parseList(needGoalsList);
     }
+
+    private String parseList(SortedSet<GoalBDI> list) {
+        StringBuffer result = new StringBuffer();
+        if(!list.isEmpty()){
+            for(GoalBDI goal : list){
+                result.append("\n\t - " + goal.toString());
+            }
+        } else{
+            result.append("\n\tNo hay metas");
+        }
+        return result.toString();
+    }
+    
     
 }

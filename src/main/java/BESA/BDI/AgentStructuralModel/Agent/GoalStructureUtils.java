@@ -19,7 +19,7 @@ public class GoalStructureUtils {
 
         while (!stack.isEmpty()) {
             LatentGoal node = stack.pop();
-            node.setDetectionValue(node.detectGoal(believes));
+            node.setDetectionValue(node.detectCompositeGoal(believes));
             if (node.getDetectionValue() > threshold) {
                 node.setContributionValue(node.evaluateCompositeContribution(stateBDI));
             } else {

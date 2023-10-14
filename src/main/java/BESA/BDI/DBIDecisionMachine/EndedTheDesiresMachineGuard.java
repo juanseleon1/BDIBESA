@@ -32,7 +32,7 @@ public class EndedTheDesiresMachineGuard extends GuardBESA{
                 stateBDI.setEndedTheDesiresMachine(false);
                 stateBDI.setInQueue(false);
             } catch (ExceptionBESA ex) {
-               ReportBESA.error(ex.getMessage());
+               //ReportBESA.error(ex.getMessage());
             }
               
         }

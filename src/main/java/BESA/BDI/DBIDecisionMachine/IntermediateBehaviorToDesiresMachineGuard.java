@@ -32,7 +32,7 @@ public class IntermediateBehaviorToDesiresMachineGuard extends GuardBESA{
                 stateBDI.setEndedTheDesiresMachine(false);
                
             } catch (ExceptionBESA ex) {
-               ReportBESA.error(ex.getMessage());
+               //ReportBESA.error(ex.getMessage());
             }
         }else {
             stateBDI.setInQueue(true);
